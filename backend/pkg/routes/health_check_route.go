@@ -1,12 +1,14 @@
 package routes
 
 import (
-	"backend/app/controllers"
+	controllers "backend/app/controllers/healthCheck"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func HealthCheckRoute(a *fiber.App, basepath string, version string) {
-	route := a.Group(basepath).Group(version)
-	route.Get("/books", controllers.HealthCheck)
+func HealthCheckRoute(routerPath string) func(a *fiber.App, basepath string, version string) {
+	return func(a *fiber.App, basepath string, version string) {
+		route := a.Group(basepath).Group(version).Group(routerPath)
+		route.Get("/", controllers.HealthCheck)
+	}
 }

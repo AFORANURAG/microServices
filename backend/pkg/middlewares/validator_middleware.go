@@ -1,4 +1,4 @@
-package middleware
+package middlewares
 
 import (
 	"fmt"
@@ -19,10 +19,18 @@ type ErrorResponse struct {
 	Value       interface{}
 }
 
+type RequestComponent string
+
+const (
+	QueryParams RequestComponent = "queryParams"
+	Body        RequestComponent = "body"
+	Params      RequestComponent = "params"
+)
+
 func (v XValidator) Validate(data interface{}) []ErrorResponse {
 	validationErrors := []ErrorResponse{}
-
 	errs := v.validator.Struct(data)
+
 	if errs != nil {
 		for _, err := range errs.(validator.ValidationErrors) {
 			var elem ErrorResponse
@@ -37,103 +45,41 @@ func (v XValidator) Validate(data interface{}) []ErrorResponse {
 	return validationErrors
 }
 
-var Validate = validator.New()
+var validate = validator.New()
 
-type RequestBody struct {
-	Name  string `json:"name" validate:"required"`
-	Email string `json:"email" validate:"required,email"`
-}
+// rather than building a single function for universal validation, we can create request componentwise valdiations.
+func ValidateRequest(requestComponent RequestComponent, schema interface{}) fiber.Handler {
 
-type RequestParams struct {
-	ID  int64 `json:"id" validate:"required"`
-	AGE int   `json:"age"` // Added a missing tag
-}
-
-type RequestContainer struct {
-	RequestBody   *RequestBody
-	RequestParams *RequestParams
-	RequestQuery  interface{}
-}
-
-func ValidateBody(field RequestContainer) func(c *fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
-		customValidator := XValidator{validator: Validate} // Use the shared validator
+		// Create a custom validator
+		customValidator := XValidator{validator: validate}
 
-		if field.RequestBody != nil {
-			err := c.BodyParser(field.RequestBody)
-			if err != nil {
-				panic("error parsing body")
+		switch requestComponent {
+		case "queryParams":
+			if err := c.QueryParser(&schema); err != nil {
+				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 			}
-			fmt.Printf("<---------------------------------The request body is-------------------------------------> %+v\n", field.RequestBody)
-
-			if errs := customValidator.Validate(field.RequestBody); len(errs) > 0 && errs[0].Error {
-				errMsgs := make([]string, len(errs))
-
-				for i, err := range errs {
-					errMsgs[i] = fmt.Sprintf(
-						"[%s]: '%v' | Needs to implement '%s'",
-						err.FailedField,
-						err.Value,
-						err.Tag,
-					)
-				}
-				return &fiber.Error{
-					Code:    fiber.ErrBadRequest.Code,
-					Message: strings.Join(errMsgs, " and "),
-				}
+		case "body":
+			if err := c.BodyParser(&schema); err != nil {
+				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 			}
+		case "params":
+			if err := c.ParamsParser(&schema); err != nil {
+				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+			}
+		default:
+			// Handle unknown requestComponent
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Unknown RequestComponent"})
 		}
-
-		if field.RequestParams != nil {
-			err1 := c.ParamsParser(field.RequestParams)
-			if err1 != nil {
-				panic("error parsing params")
+		// Validate the schema using the custom validator
+		fmt.Printf("schema: %+v\n", schema)
+		if errs := customValidator.Validate(schema); len(errs) > 0 && errs[0].Error {
+			errMsgs := make([]string, 0)
+			for _, err := range errs {
+				errMsgs = append(errMsgs, fmt.Sprintf("[%s]: '%v' | Needs to implement '%s'", err.FailedField, err.Value, err.Tag))
 			}
-			fmt.Printf("<---------------------------------The request Params are-------------------------------------> %+v\n", field.RequestParams)
-
-			if errs := customValidator.Validate(field.RequestParams); len(errs) > 0 && errs[0].Error {
-				errMsgs := make([]string, len(errs))
-
-				for i, err := range errs {
-					errMsgs[i] = fmt.Sprintf(
-						"[%s]: '%v' | Needs to implement '%s'",
-						err.FailedField,
-						err.Value,
-						err.Tag,
-					)
-				}
-				return &fiber.Error{
-					Code:    fiber.ErrBadRequest.Code,
-					Message: strings.Join(errMsgs, " and "),
-				}
-			}
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": strings.Join(errMsgs, " and ")})
 		}
-
-		if field.RequestQuery != nil {
-			err2 := c.QueryParser(field.RequestQuery)
-			if err2 != nil {
-				panic("error parsing query")
-			}
-			fmt.Printf("<---------------------------------The request query are-------------------------------------> %+v\n", field.RequestQuery)
-
-			if errs := customValidator.Validate(field.RequestQuery); len(errs) > 0 && errs[0].Error {
-				errMsgs := make([]string, len(errs))
-
-				for i, err := range errs {
-					errMsgs[i] = fmt.Sprintf(
-						"[%s]: '%v' | Needs to implement '%s'",
-						err.FailedField,
-						err.Value,
-						err.Tag,
-					)
-				}
-				return &fiber.Error{
-					Code:    fiber.ErrBadRequest.Code,
-					Message: strings.Join(errMsgs, " and "),
-				}
-			}
-		}
-
 		return c.Next()
 	}
 }
