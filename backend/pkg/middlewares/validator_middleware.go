@@ -51,7 +51,7 @@ var validate = validator.New()
 func ValidateRequest(requestComponent RequestComponent, schema interface{}) fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
-		// Create a custom validator
+		// create a custom validator
 		customValidator := XValidator{validator: validate}
 
 		switch requestComponent {
@@ -68,15 +68,13 @@ func ValidateRequest(requestComponent RequestComponent, schema interface{}) fibe
 				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 			}
 		default:
-			// Handle unknown requestComponent
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Unknown RequestComponent"})
 		}
-		// Validate the schema using the custom validator
 		fmt.Printf("schema: %+v\n", schema)
 		if errs := customValidator.Validate(schema); len(errs) > 0 && errs[0].Error {
 			errMsgs := make([]string, 0)
 			for _, err := range errs {
-				errMsgs = append(errMsgs, fmt.Sprintf("[%s]: '%v' | Needs to implement '%s'", err.FailedField, err.Value, err.Tag))
+				errMsgs = append(errMsgs, fmt.Sprintf("%s: '%v' | Needs to implement '%s'", err.FailedField, err.Value, err.Tag))
 			}
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": strings.Join(errMsgs, " and ")})
 		}

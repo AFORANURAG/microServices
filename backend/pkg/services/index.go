@@ -10,5 +10,4 @@ type Services struct {
 
 func RegisterServices() *Services {
 	return &Services{AuthenticationService: authenticationService.AuthenticationServiceProvider()}
-
 }

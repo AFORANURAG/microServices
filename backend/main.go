@@ -56,7 +56,7 @@ func main() {
 	for _, route := range routeFuctions {
 		route(app, "api", "v1")
 	}
-	configs.InjectServices()
+	// configs.InjectServices()
 	if os.Getenv("STAGE_STATUS") == "dev" {
 		utils.StartServer(app)
 	} else {
