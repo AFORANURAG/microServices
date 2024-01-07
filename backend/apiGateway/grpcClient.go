@@ -1,18 +1,17 @@
 package main
 
 import (
-	"backend/userService/services/userService"
 	"context"
 	"fmt"
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
+	"github.com/AFORANURAG/E-commerce-App/userService/services/userService"
+	ser "github.com/AFORANURAG/E-commerce-App/userService/services/userService"
 	"google.golang.org/grpc"
 )
 
 func main() {
-	godotenv.Load()
 	port := os.Getenv("SERVER_PORT")
 	host := os.Getenv("SERVER_HOST")
 	connectionString := fmt.Sprintf("%s:%s", host, port)
@@ -22,7 +21,7 @@ func main() {
 		log.Fatalf("failed to connect:%v", err)
 	}
 	defer userServiceConn.Close()
-	client := userService.NewUserServiceClient(userServiceConn)
+	client := ser.NewUserServiceClient(userServiceConn)
 	res, err := client.GetUserById(context.Background(), &userService.Request{Name: "anurag"})
 	if err != nil {
 		log.Fatalf("Error while getting user: %v", err)
