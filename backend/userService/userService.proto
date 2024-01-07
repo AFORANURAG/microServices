@@ -1,0 +1,20 @@
+syntax = "proto3";
+package userServuice;
+
+option go_package="./";
+
+message Response {
+  string name = 1;
+  int32 id = 2;  // Unique ID number for this person.
+  string email = 3;
+}
+message Request {
+ string name=1;
+ int32 id=2;
+}
+
+service userService {
+rpc GetUserByName(Request) returns (Response);
+rpc	GetUserById(Request) returns (Response);
+
+}
