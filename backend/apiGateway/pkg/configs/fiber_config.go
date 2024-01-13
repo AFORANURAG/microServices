@@ -1,12 +1,13 @@
 package configs
 
 import (
-	"backend/apiGateway/pkg/utils"
 	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/AFORANURAG/microServices/backend/apiGateway/pkg/utils"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"

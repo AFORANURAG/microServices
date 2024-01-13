@@ -4,8 +4,9 @@
 package userService
 
 import (
-	dbservice "backend/userService/services/dbService"
-	"backend/userService/userRepository"
+	"github.com/AFORANURAG/microServices/backend/userService/userRepository"
+
+	dbservice "github.com/AFORANURAG/microServices/backend/userService/services/dbService"
 
 	"github.com/google/wire"
 )

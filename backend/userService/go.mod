@@ -1,4 +1,4 @@
-module github.com/AFORANURAG/E-commerce-App/backend/userService
+module github.com/AFORANURAG/microServices/backend/userService
 
 go 1.20
 

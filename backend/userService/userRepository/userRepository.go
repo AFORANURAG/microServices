@@ -1,8 +1,8 @@
 package userRepository
 
 import (
-	userSchema "backend/userService/models"
-	dbservice "backend/userService/services/dbService"
+	userSchema "github.com/AFORANURAG/microServices/backend/userService/models"
+	dbservice "github.com/AFORANURAG/microServices/backend/userService/services/dbService"
 )
 
 type IUserRepository interface {

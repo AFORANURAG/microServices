@@ -1,13 +1,16 @@
 package main
 
 import (
-	"backend/apiGateway/pkg/configs"
-	middleware "backend/apiGateway/pkg/middlewares"
-	"backend/apiGateway/pkg/routes"
-	"backend/apiGateway/pkg/utils"
 	"fmt"
 	"io"
 	"os"
+
+	"github.com/AFORANURAG/microServices/backend/apiGateway/pkg/routes"
+	"github.com/AFORANURAG/microServices/backend/apiGateway/pkg/utils"
+
+	middleware "github.com/AFORANURAG/microServices/backend/apiGateway/pkg/middlewares"
+
+	"github.com/AFORANURAG/microServices/backend/apiGateway/pkg/configs"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"

@@ -1,8 +1,9 @@
 package userService
 
 import (
-	"backend/userService/userRepository"
 	context "context"
+
+	"github.com/AFORANURAG/microServices/backend/userService/userRepository"
 )
 
 type UserServiceImpl struct {

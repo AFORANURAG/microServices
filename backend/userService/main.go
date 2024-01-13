@@ -1,11 +1,12 @@
 package main
 
 import (
-	"backend/userService/services/userService"
 	"fmt"
 	"log"
 	"net"
 	"os"
+
+	"github.com/AFORANURAG/microServices/backend/userService/services/userService"
 
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"

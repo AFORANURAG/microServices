@@ -1,4 +1,4 @@
-module github.com/AFORANURAG/E-commerce-App/backend/apiGateway
+module github.com/AFORANURAG/microServices/backend/apiGateway
 
 go 1.20
 

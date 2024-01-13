@@ -7,8 +7,8 @@
 package userService
 
 import (
-	"backend/userService/services/dbService"
-	"backend/userService/userRepository"
+	"github.com/AFORANURAG/microServices/backend/userService/services/dbService"
+	"github.com/AFORANURAG/microServices/backend/userService/userRepository"
 )
 
 // Injectors from wire.go:
