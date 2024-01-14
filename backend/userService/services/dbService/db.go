@@ -10,10 +10,28 @@ import (
 
 type MYSQLDBService struct {
 	db  *sql.DB
-	DSN string
+	dsn string
 }
 
-var instance *MYSQLDBService
+func (dbs *MYSQLDBService) GetDb() (*sql.DB, error) {
+	return dbs.db, nil
+}
+
+func (dbs *MYSQLDBService) Exec(query string, args ...any) (*sql.Rows, error) {
+	_, err :=
+		dbs.db.Exec(query, args...)
+	if err != nil {
+		log.Fatalf("error while inserting value : %v", err)
+	}
+	res, err := dbs.db.Query("SELECT * FROM users")
+	if err != nil {
+		log.Fatalf("Error while quering for all users:%v", err)
+		return nil, err
+	}
+	return res, nil
+}
+
+var DbClient *MYSQLDBService
 var once sync.Once
 
 func NewDBServiceClientProvider(uri string) *MYSQLDBService {
@@ -23,7 +41,7 @@ func NewDBServiceClientProvider(uri string) *MYSQLDBService {
 			log.Fatalf("Error while creating DBServiceClient:%v", err)
 		}
 		log.Println("Successfully connected to PlanetScale!")
-		instance = &MYSQLDBService{db: db}
+		DbClient = &MYSQLDBService{db: db}
 	})
-	return instance
+	return DbClient
 }

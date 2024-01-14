@@ -29,6 +29,7 @@ func main() {
 		log.Fatalf("Error loading .env file")
 	}
 	grpcServer := grpc.NewServer()
+
 	userService.RegisterUserServiceServer(grpcServer, userService.InitializeUserService(os.Getenv("DSN")))
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve grpc server:%v", err)

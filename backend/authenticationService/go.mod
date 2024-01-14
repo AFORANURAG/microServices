@@ -1,4 +1,4 @@
-module github.com/AFORANURAG/E-commerce-App/backend/authenticationService
+module github.com/AFORANURAG/microServices/backend/authenticationService
 
 go 1.20
 
@@ -13,6 +13,7 @@ require (
 
 require (
 	github.com/AFORANURAG/E-commerce-App v0.1.0 // indirect
+	github.com/AFORANURAG/microServices/backend/userService v0.0.0-20240113181004-88fb073d3e61 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
@@ -39,12 +40,12 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.50.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
-	golang.org/x/crypto v0.16.0 // indirect
-	golang.org/x/net v0.19.0 // indirect
+	golang.org/x/crypto v0.18.0 // indirect
+	golang.org/x/net v0.20.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	google.golang.org/genproto v0.0.0-20231212172506-995d672761c0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240102182953-50ed04b92917 // indirect
+	google.golang.org/genproto v0.0.0-20240102182953-50ed04b92917 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240108191215-35c7eff3a6b1 // indirect
 	google.golang.org/protobuf v1.32.0 // indirect
 	gorm.io/gorm v1.25.5 // indirect
 )
