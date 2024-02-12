@@ -1,0 +1,9 @@
+# .air.toml
+
+[build]
+  cmd = "go build -o ./app"  # The command to build your application
+  bin = "app"               # The name of the binary file created by the build
+
+[run]
+  cmd = "./app"             # The command to run your application
+  restart = "main.go"       # The files to watch for changes and trigger restart

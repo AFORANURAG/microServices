@@ -1,0 +1,15 @@
+syntax="proto3";
+package emailService;
+option go_package="./";
+message EmailServiceRequest {
+  string email=1; 
+}
+message EmailServiceResponse{
+ int32 status=1;
+ bool success=2;
+ string data=3; 
+}
+
+service EmailService {
+  rpc sendEmail(EmailServiceRequest) returns (EmailServiceResponse) {}
+}
