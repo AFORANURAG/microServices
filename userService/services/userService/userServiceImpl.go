@@ -14,7 +14,7 @@ type UserServiceImpl struct {
 }
 
 func (u *UserServiceImpl) GetUserByName(c context.Context, in *Request) (*Response, error) {
-	userProfileRow, err := u.UserRepo.GetUserByName(in.Name)
+	userProfileRow, err := u.UserRepo.GetUserByName(*in.Name)
 	fmt.Printf("Profile : %v", in)
 	if err != nil {
 		log.Printf("Error while fetching users :%v ", err)
@@ -34,7 +34,7 @@ func (u *UserServiceImpl) GetUserByName(c context.Context, in *Request) (*Respon
 }
 
 func (u *UserServiceImpl) GetUserById(c context.Context, in *Request) (*Response, error) {
-	userProfileRow, err := u.UserRepo.GetUserByName(in.Id)
+	userProfileRow, err := u.UserRepo.GetUserByName(*in.Id)
 	if err != nil {
 		log.Printf("Error while fetching users :%v ", err)
 	}
@@ -45,12 +45,29 @@ func (u *UserServiceImpl) GetUserById(c context.Context, in *Request) (*Response
 	return &response, scanErr
 }
 
+func (u *UserServiceImpl) GetUserByEmail(c context.Context, in *GetUserWithEmail) (*Response, error) {
+	userProfile, err := u.UserRepo.GetUserWithEmail(in.Email)
+	if err != nil {
+		log.Printf("Error while fetching users :%v ", err)
+		return &Response{}, nil
+	}
+	// Row,err
+	response := &Response{
+		Email:      userProfile.Email,
+		Id:         userProfile.Id,
+		IsVerified: userProfile.IsVerified,
+		Name:       &userProfile.Name,
+	}
+
+	return response, nil
+}
+
 func (u *UserServiceImpl) CreateUser(c context.Context, in *Request) (*CreateUserResponse, error) {
 	// Create the user here
 	log.Printf("In request is %v", in)
 	userProfile, userFetchError := u.GetUserByName(context.Background(), in)
 	if userFetchError != nil {
-		_, err := u.UserRepo.CreateUser(&userSchema.UserSchema{Name: in.Name, Email: in.Email})
+		_, err := u.UserRepo.CreateUser(&userSchema.UserSchema{Name: *in.Name, Email: *in.Email})
 		if err != nil {
 			return nil, fmt.Errorf("Error creating user:%v", err)
 		}

@@ -3,6 +3,7 @@ package emailService;
 option go_package="./";
 message EmailServiceRequest {
   string email=1; 
+  string originURL=2;
 }
 message EmailServiceResponse{
  int32 status=1;

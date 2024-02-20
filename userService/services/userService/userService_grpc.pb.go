@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	UserService_GetUserByName_FullMethodName = "/userServuice.userService/GetUserByName"
-	UserService_GetUserById_FullMethodName   = "/userServuice.userService/GetUserById"
-	UserService_CreateUser_FullMethodName    = "/userServuice.userService/CreateUser"
-	UserService_MarkAsVerfied_FullMethodName = "/userServuice.userService/MarkAsVerfied"
+	UserService_GetUserByName_FullMethodName  = "/userServuice.userService/GetUserByName"
+	UserService_GetUserById_FullMethodName    = "/userServuice.userService/GetUserById"
+	UserService_GetUserByEmail_FullMethodName = "/userServuice.userService/GetUserByEmail"
+	UserService_CreateUser_FullMethodName     = "/userServuice.userService/CreateUser"
+	UserService_MarkAsVerfied_FullMethodName  = "/userServuice.userService/MarkAsVerfied"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -31,6 +32,7 @@ const (
 type UserServiceClient interface {
 	GetUserByName(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
 	GetUserById(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
+	GetUserByEmail(ctx context.Context, in *GetUserWithEmail, opts ...grpc.CallOption) (*Response, error)
 	CreateUser(ctx context.Context, in *Request, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	MarkAsVerfied(ctx context.Context, in *MarkUserAsVerfiedRequest, opts ...grpc.CallOption) (*MarkUserAsVerfiedResponse, error)
 }
@@ -61,6 +63,15 @@ func (c *userServiceClient) GetUserById(ctx context.Context, in *Request, opts .
 	return out, nil
 }
 
+func (c *userServiceClient) GetUserByEmail(ctx context.Context, in *GetUserWithEmail, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, UserService_GetUserByEmail_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userServiceClient) CreateUser(ctx context.Context, in *Request, opts ...grpc.CallOption) (*CreateUserResponse, error) {
 	out := new(CreateUserResponse)
 	err := c.cc.Invoke(ctx, UserService_CreateUser_FullMethodName, in, out, opts...)
@@ -85,6 +96,7 @@ func (c *userServiceClient) MarkAsVerfied(ctx context.Context, in *MarkUserAsVer
 type UserServiceServer interface {
 	GetUserByName(context.Context, *Request) (*Response, error)
 	GetUserById(context.Context, *Request) (*Response, error)
+	GetUserByEmail(context.Context, *GetUserWithEmail) (*Response, error)
 	CreateUser(context.Context, *Request) (*CreateUserResponse, error)
 	MarkAsVerfied(context.Context, *MarkUserAsVerfiedRequest) (*MarkUserAsVerfiedResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
@@ -99,6 +111,9 @@ func (UnimplementedUserServiceServer) GetUserByName(context.Context, *Request) (
 }
 func (UnimplementedUserServiceServer) GetUserById(context.Context, *Request) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserById not implemented")
+}
+func (UnimplementedUserServiceServer) GetUserByEmail(context.Context, *GetUserWithEmail) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserByEmail not implemented")
 }
 func (UnimplementedUserServiceServer) CreateUser(context.Context, *Request) (*CreateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
@@ -155,6 +170,24 @@ func _UserService_GetUserById_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_GetUserByEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserWithEmail)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetUserByEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_GetUserByEmail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetUserByEmail(ctx, req.(*GetUserWithEmail))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UserService_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Request)
 	if err := dec(in); err != nil {
@@ -205,6 +238,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserById",
 			Handler:    _UserService_GetUserById_Handler,
+		},
+		{
+			MethodName: "GetUserByEmail",
+			Handler:    _UserService_GetUserByEmail_Handler,
 		},
 		{
 			MethodName: "CreateUser",

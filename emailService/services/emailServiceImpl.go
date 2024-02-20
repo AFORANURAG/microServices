@@ -34,7 +34,7 @@ func (e *EmailServiceImpl) SendEmail(c context.Context, requestBody *EmailServic
 	if err != nil {
 		log.Printf("Error While Generating JWT %v", err)
 	}
-	link := fmt.Sprintf("Click on  http://localhost:7000/api/v1/authentication/verify?token=%s to Complete Verification Process.", token)
+	link := fmt.Sprintf("Click on  %s/verify?token=%s to Complete Verification Process.", requestBody.OriginURL, token)
 	m.SetBody("text/html", link)
 
 	d := gomail.NewDialer(e.smtpServer, e.port, e.senderEmail, e.password)

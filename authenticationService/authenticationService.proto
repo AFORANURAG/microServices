@@ -6,6 +6,8 @@ option go_package="./";
 message SignUpRequest {
   string name=1;
   optional string email=2;
+  string originURL=3;
+
 }
 
 message SignUpResponse {
@@ -22,7 +24,7 @@ message LoginRequest {
 message LoginResponse {
   int32 status=1;
   bool success=2;
-  string token=3;
+ optional string token=3;
 }
 message VerifyAccountRequest{
   string token=1;

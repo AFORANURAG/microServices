@@ -7,30 +7,39 @@ import (
 	ser "github.com/AFORANURAG/microServices/backend/authenticationService/services/authService"
 )
 
-type SignedUpResponse struct {
+type AuthenticationResponse struct {
 	// Message string `validate:"required" json:"message"`
 	Status  int32 `validate:"required" json:"status"`
 	Success bool  `validate:"required" json:"success"`
 }
 
 type IAuthenticationService interface {
-	Signup(name string, email string) (*SignedUpResponse, error)
+	Signup(name string, email string, originURL string) (*AuthenticationResponse, error)
 	VerifyAccount(token string) (*ser.VerifyAccountResponse, error)
+	Login(email string) (*AuthenticationResponse, error)
 }
 
 type AuthenticationServiceImpl struct {
 	authServiceClient ser.AuthenticationServiceClient
 }
 
-func (a *AuthenticationServiceImpl) Signup(name string, email string) (*SignedUpResponse, error) {
-	response, err := a.authServiceClient.Signup(context.Background(), &ser.SignUpRequest{Name: name, Email: &email})
+func (a *AuthenticationServiceImpl) Signup(name string, email string, originURL string) (*AuthenticationResponse, error) {
+	response, err := a.authServiceClient.Signup(context.Background(), &ser.SignUpRequest{Name: name, Email: &email, OriginURL: originURL})
 	if err != nil {
 		log.Printf("Error While Signing up in authentication in api gatewate : %v", err)
-		return &SignedUpResponse{Status: 500, Success: false}, err
+		return &AuthenticationResponse{Status: 500, Success: false}, err
 	}
 	log.Printf("UserId : %v", response.UserId)
 
-	return &SignedUpResponse{Status: response.Status, Success: response.Success}, nil
+	return &AuthenticationResponse{Status: response.Status, Success: response.Success}, nil
+}
+func (a *AuthenticationServiceImpl) Login(email string) (*AuthenticationResponse, error) {
+	response, err := a.authServiceClient.Login(context.Background(), &ser.LoginRequest{Email: email})
+	if err != nil {
+		log.Printf("Error While Signing up in authentication in api gatewate : %v", err)
+		return &AuthenticationResponse{Status: 500, Success: false}, err
+	}
+	return &AuthenticationResponse{Status: response.Status, Success: response.Success}, nil
 }
 
 func (a *AuthenticationServiceImpl) VerifyAccount(token string) (*ser.VerifyAccountResponse, error) {
