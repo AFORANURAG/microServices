@@ -1,8 +1,9 @@
-module github.com/AFORANURAG/microServices/backend/emailService
+module github.com/AFORANURAG/microServices/emailService
 
 go 1.20
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/google/wire v0.5.0
 	github.com/joho/godotenv v1.5.1
 	google.golang.org/grpc v1.60.1
@@ -11,7 +12,6 @@ require (
 )
 
 require (
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	golang.org/x/net v0.16.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
