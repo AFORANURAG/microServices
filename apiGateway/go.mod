@@ -1,9 +1,8 @@
-module github.com/AFORANURAG/microServices/backend/apiGateway
+module github.com/AFORANURAG/microServices/apiGateway
 
 go 1.20
 
 require (
-	github.com/AFORANURAG/microServices/backend/authenticationService v0.0.0-20240114100629-622fdbe46d3b
 	github.com/go-playground/validator/v10 v10.16.0
 	github.com/gofiber/fiber/v2 v2.52.0
 	github.com/gofiber/template/html/v2 v2.1.0
@@ -13,7 +12,6 @@ require (
 )
 
 require (
-	github.com/AFORANURAG/microServices/backend/userService v0.0.0-20240114100629-622fdbe46d3b // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
