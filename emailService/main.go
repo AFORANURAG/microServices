@@ -6,7 +6,7 @@ import (
 	"net"
 	"os"
 
-	emailService "github.com/AFORANURAG/microServices/backend/emailService/services"
+	emailService "github.com/AFORANURAG/microServices/emailService/services"
 
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"

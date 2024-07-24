@@ -7,7 +7,7 @@
 package authenticationService
 
 import (
-	"github.com/AFORANURAG/microServices/backend/apiGateway/pkg/clientProviders/authenticationServiceClient"
+	"github.com/AFORANURAG/microServices/apiGateway/pkg/clientProviders/authenticationServiceClient"
 )
 
 // Injectors from wire.go:

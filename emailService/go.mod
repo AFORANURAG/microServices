@@ -1,4 +1,4 @@
-module github.com/AFORANURAG/microServices/backend/emailService
+module github.com/AFORANURAG/microServices/emailService
 
 go 1.20
 

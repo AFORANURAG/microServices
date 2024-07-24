@@ -7,7 +7,7 @@ import (
 
 	"sync"
 
-	ser "github.com/AFORANURAG/microServices/backend/userService/services/userService"
+	ser "github.com/AFORANURAG/microServices/userService/services/userService"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 )

@@ -7,8 +7,8 @@
 package authService
 
 import (
-	"github.com/AFORANURAG/microServices/backend/authenticationService/clientProviders/emailServiceClient"
-	"github.com/AFORANURAG/microServices/backend/authenticationService/clientProviders/userServiceClient"
+	"github.com/AFORANURAG/microServices/authenticationService/clientProviders/emailServiceClient"
+	"github.com/AFORANURAG/microServices/authenticationService/clientProviders/userServiceClient"
 )
 
 // Injectors from wire.go:

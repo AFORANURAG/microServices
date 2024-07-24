@@ -1,4 +1,4 @@
-module github.com/AFORANURAG/microServices/backend/userService
+module github.com/AFORANURAG/microServices/userService
 
 go 1.20
 

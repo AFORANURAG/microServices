@@ -6,9 +6,9 @@ import (
 	"log"
 	"os"
 
-	authUtilities "github.com/AFORANURAG/microServices/backend/authenticationService/utilityFunctions/authUtilites"
-	emailService "github.com/AFORANURAG/microServices/backend/emailService/services"
-	ser "github.com/AFORANURAG/microServices/backend/userService/services/userService"
+	authUtilities "github.com/AFORANURAG/microServices/authenticationService/utilityFunctions/authUtilites"
+	emailService "github.com/AFORANURAG/microServices/emailService/services"
+	ser "github.com/AFORANURAG/microServices/userService/services/userService"
 	"github.com/joho/godotenv"
 )
 

@@ -1,7 +1,7 @@
 package routes
 
 import (
-	controllers "github.com/AFORANURAG/microServices/backend/apiGateway/app/controllers/healthCheck"
+	controllers "github.com/AFORANURAG/microServices/apiGateway/app/controllers/healthCheck"
 
 	"github.com/gofiber/fiber/v2"
 )

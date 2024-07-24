@@ -6,7 +6,7 @@ import (
 	"net"
 	"os"
 
-	authenticationService "github.com/AFORANURAG/microServices/backend/authenticationService/services/authService"
+	authenticationService "github.com/AFORANURAG/microServices/authenticationService/services/authService"
 
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"

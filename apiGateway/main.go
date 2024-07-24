@@ -5,12 +5,12 @@ import (
 	"io"
 	"os"
 
-	"github.com/AFORANURAG/microServices/backend/apiGateway/pkg/routes"
-	"github.com/AFORANURAG/microServices/backend/apiGateway/pkg/utils"
+	"github.com/AFORANURAG/microServices/apiGateway/pkg/routes"
+	"github.com/AFORANURAG/microServices/apiGateway/pkg/utils"
 
-	middleware "github.com/AFORANURAG/microServices/backend/apiGateway/pkg/middlewares"
+	middleware "github.com/AFORANURAG/microServices/apiGateway/pkg/middlewares"
 
-	"github.com/AFORANURAG/microServices/backend/apiGateway/pkg/configs"
+	"github.com/AFORANURAG/microServices/apiGateway/pkg/configs"
 
 	"github.com/gofiber/fiber/v2"
 	log "github.com/gofiber/fiber/v2/log"

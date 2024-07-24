@@ -1,9 +1,9 @@
-module github.com/AFORANURAG/microServices/backend/authenticationService
+module github.com/AFORANURAG/microServices/authenticationService
 
 go 1.20
 
 require (
-	github.com/AFORANURAG/microServices/backend/userService v0.0.0-20240114092727-331d2d53ce70
+	github.com/AFORANURAG/microServices/userService v0.0.0-20240114092727-331d2d53ce70
 	github.com/go-playground/validator/v10 v10.16.0
 	github.com/gofiber/fiber/v2 v2.52.0
 	github.com/gofiber/template/html/v2 v2.1.0

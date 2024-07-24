@@ -1,8 +1,8 @@
 package controller
 
 import (
-	authenticationController "github.com/AFORANURAG/microServices/backend/apiGateway/app/controllers/authentication"
-	authenticationService "github.com/AFORANURAG/microServices/backend/apiGateway/pkg/services/authenticationService"
+	authenticationController "github.com/AFORANURAG/microServices/apiGateway/app/controllers/authentication"
+	authenticationService "github.com/AFORANURAG/microServices/apiGateway/pkg/services/authenticationService"
 )
 
 type Controller struct {

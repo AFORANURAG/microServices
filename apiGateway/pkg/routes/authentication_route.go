@@ -1,11 +1,11 @@
 package routes
 
 import (
-	validations "github.com/AFORANURAG/microServices/backend/apiGateway/pkg/validations/user"
+	validations "github.com/AFORANURAG/microServices/apiGateway/pkg/validations/user"
 
-	"github.com/AFORANURAG/microServices/backend/apiGateway/pkg/middlewares"
+	"github.com/AFORANURAG/microServices/apiGateway/pkg/middlewares"
 
-	controller "github.com/AFORANURAG/microServices/backend/apiGateway/app/controllers"
+	controller "github.com/AFORANURAG/microServices/apiGateway/app/controllers"
 
 	"github.com/gofiber/fiber/v2"
 )

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	ser "github.com/AFORANURAG/microServices/backend/apiGateway/pkg/services/authenticationService"
-	validations "github.com/AFORANURAG/microServices/backend/apiGateway/pkg/validations/user"
+	ser "github.com/AFORANURAG/microServices/apiGateway/pkg/services/authenticationService"
+	validations "github.com/AFORANURAG/microServices/apiGateway/pkg/validations/user"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 )

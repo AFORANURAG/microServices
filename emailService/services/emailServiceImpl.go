@@ -10,7 +10,7 @@ import (
 
 	"strconv"
 
-	authenticationUtilities "github.com/AFORANURAG/microServices/backend/emailService/utilities/authUtilities"
+	authenticationUtilities "github.com/AFORANURAG/microServices/emailService/utilities/authUtilities"
 	"github.com/joho/godotenv"
 )
 

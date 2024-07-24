@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	userSchema "github.com/AFORANURAG/microServices/backend/userService/models"
-	userRepository "github.com/AFORANURAG/microServices/backend/userService/userRepository"
+	userSchema "github.com/AFORANURAG/microServices/userService/models"
+	userRepository "github.com/AFORANURAG/microServices/userService/userRepository"
 )
 
 type UserServiceImpl struct {

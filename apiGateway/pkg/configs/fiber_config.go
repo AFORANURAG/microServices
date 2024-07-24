@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/AFORANURAG/microServices/backend/apiGateway/pkg/utils"
+	"github.com/AFORANURAG/microServices/apiGateway/pkg/utils"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"

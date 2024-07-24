@@ -4,7 +4,7 @@
 package authenticationService
 
 import (
-	authenticationServiceClient "github.com/AFORANURAG/microServices/backend/apiGateway/pkg/clientProviders/authenticationServiceClient"
+	authenticationServiceClient "github.com/AFORANURAG/microServices/apiGateway/pkg/clientProviders/authenticationServiceClient"
 	"github.com/google/wire"
 )
 

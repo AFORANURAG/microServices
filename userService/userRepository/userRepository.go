@@ -5,9 +5,9 @@ import (
 	"database/sql"
 	"log"
 
-	userSchema "github.com/AFORANURAG/microServices/backend/userService/models"
-	getters "github.com/AFORANURAG/microServices/backend/userService/queries/getters"
-	dbservice "github.com/AFORANURAG/microServices/backend/userService/services/dbService"
+	userSchema "github.com/AFORANURAG/microServices/userService/models"
+	getters "github.com/AFORANURAG/microServices/userService/queries/getters"
+	dbservice "github.com/AFORANURAG/microServices/userService/services/dbService"
 )
 
 type IUserRepository interface {

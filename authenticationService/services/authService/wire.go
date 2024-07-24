@@ -4,8 +4,8 @@
 package authService
 
 import (
-	emailServiceClient "github.com/AFORANURAG/microServices/backend/authenticationService/clientProviders/emailServiceClient"
-	userServiceClient "github.com/AFORANURAG/microServices/backend/authenticationService/clientProviders/userServiceClient"
+	emailServiceClient "github.com/AFORANURAG/microServices/authenticationService/clientProviders/emailServiceClient"
+	userServiceClient "github.com/AFORANURAG/microServices/authenticationService/clientProviders/userServiceClient"
 
 	"github.com/google/wire"
 )

@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	ser "github.com/AFORANURAG/microServices/backend/authenticationService/services/authService"
+	ser "github.com/AFORANURAG/microServices/authenticationService/services/authService"
 )
 
 type AuthenticationResponse struct {
