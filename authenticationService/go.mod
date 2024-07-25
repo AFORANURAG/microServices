@@ -3,7 +3,7 @@ module github.com/AFORANURAG/microServices/authenticationService
 go 1.20
 
 require (
-	github.com/AFORANURAG/microServices/userService v0.0.0-20240114092727-331d2d53ce70
+	github.com/AFORANURAG/microServices/userService v0.0.0-20240114163218-ed43fe30ee4d
 	github.com/go-playground/validator/v10 v10.16.0
 	github.com/gofiber/fiber/v2 v2.52.0
 	github.com/gofiber/template/html/v2 v2.1.0
@@ -12,6 +12,7 @@ require (
 	google.golang.org/grpc v1.60.1
 	google.golang.org/protobuf v1.32.0
 )
+
 
 require (
 	github.com/AFORANURAG/E-commerce-App v0.1.0 // indirect
