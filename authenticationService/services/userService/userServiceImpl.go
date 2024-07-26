@@ -5,15 +5,15 @@ import (
 	"fmt"
 	"log"
 
-	userSchema "github.com/AFORANURAG/microServices/userService/models"
-	userRepository "github.com/AFORANURAG/microServices/userService/userRepository"
+	userSchema "github.com/AFORANURAG/microServices/authenticationService/models"
+	userRepository "github.com/AFORANURAG/microServices/authenticationService/userRepository"
 )
 
 type UserServiceImpl struct {
 	UserRepo userRepository.IUserRepository
 }
 
-func (u *UserServiceImpl) GetUserByName(c context.Context, in *Request) (*Response, error) {
+func (u *UserServiceImpl) GetUserByName(c context.Context, in *User) (*Response, error) {
 	userProfileRow, err := u.UserRepo.GetUserByName(*in.Name)
 	fmt.Printf("Profile : %v", in)
 	if err != nil {
@@ -33,7 +33,7 @@ func (u *UserServiceImpl) GetUserByName(c context.Context, in *Request) (*Respon
 
 }
 
-func (u *UserServiceImpl) GetUserById(c context.Context, in *Request) (*Response, error) {
+func (u *UserServiceImpl) GetUserById(c context.Context, in *User) (*Response, error) {
 	userProfileRow, err := u.UserRepo.GetUserByName(*in.Id)
 	if err != nil {
 		log.Printf("Error while fetching users :%v ", err)
@@ -62,7 +62,7 @@ func (u *UserServiceImpl) GetUserByEmail(c context.Context, in *GetUserWithEmail
 	return response, nil
 }
 
-func (u *UserServiceImpl) CreateUser(c context.Context, in *Request) (*CreateUserResponse, error) {
+func (u *UserServiceImpl) CreateUser(c context.Context, in *User) (*CreateUserResponse, error) {
 	// Create the user here
 	log.Printf("In request is %v", in)
 	userProfile, userFetchError := u.GetUserByName(context.Background(), in)
@@ -102,6 +102,6 @@ func (u *UserServiceImpl) MarkAsVerfied(c context.Context, req *MarkUserAsVerfie
 func (u *UserServiceImpl) mustEmbedUnimplementedUserServiceServer() {
 
 }
-func NewUserServiceProvider(urepo *userRepository.UserRepository) *UserServiceImpl {
+func NewUserServiceProvider(urepo userRepository.IUserRepository) UserService {
 	return &UserServiceImpl{UserRepo: urepo}
 }

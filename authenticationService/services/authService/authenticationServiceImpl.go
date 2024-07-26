@@ -6,14 +6,14 @@ import (
 	"log"
 	"os"
 
+	userService "github.com/AFORANURAG/microServices/authenticationService/services/userService"
 	authUtilities "github.com/AFORANURAG/microServices/authenticationService/utilityFunctions/authUtilites"
 	emailService "github.com/AFORANURAG/microServices/emailService/services"
-	ser "github.com/AFORANURAG/microServices/userService/services/userService"
 	"github.com/joho/godotenv"
 )
 
 type AuthenticationServiceImpl struct {
-	client      ser.UserServiceClient
+	client   userService.UserService
 	emailclient emailService.EmailServiceClient
 }
 
@@ -21,13 +21,13 @@ func (a *AuthenticationServiceImpl) Signup(c context.Context, s *SignUpRequest) 
 	// check whether a user already exists or not
 	fmt.Printf("originURL is in authgrpc: %v", s.OriginURL)
 	fmt.Printf("Signup Request : %v", s)
-	_, err := a.client.GetUserByName(context.Background(), &ser.Request{Name: &s.Name})
+	_, err := a.client.GetUserByName(context.Background(), &userService.User{Name: &s.Name})
 	if err != nil {
 		// user does not exist
 		// create the user here
 		// We are gonna implement the magic link flow
 		// so send him an email containing a magic link , and on clicking on that link , user will  be signedUp
-		_, err := a.client.CreateUser(context.Background(), &ser.Request{Name: &s.Name, Email: s.Email})
+		_, err := a.client.CreateUser(context.Background(), &userService.User{Name: &s.Name, Email: s.Email})
 		// I don't understand why Name and Email are referenced differently.
 		// token:=authUtilities.
 		_, emailError := a.emailclient.SendEmail(context.Background(), &emailService.EmailServiceRequest{Email: *s.Email, OriginURL: s.OriginURL})
@@ -50,7 +50,7 @@ func (a *AuthenticationServiceImpl) VerifyUser(c context.Context, req *VerifyAcc
 	if isVerified && email != authUtilities.INVALID_TOKEN {
 		// User is verified now call the login function with this email
 		// mark the user as verified in the database
-		_, markUserErr := a.client.MarkAsVerfied(context.Background(), &ser.MarkUserAsVerfiedRequest{IsVerified: true, Email: email})
+		_, markUserErr := a.client.MarkAsVerfied(context.Background(), &userService.MarkUserAsVerfiedRequest{IsVerified: true, Email: email})
 		if markUserErr != nil {
 			log.Printf("Error While marking user as verified: %v", markUserErr)
 			return &VerifyAccountResponse{
@@ -74,7 +74,7 @@ func (a *AuthenticationServiceImpl) Login(c context.Context, r *LoginRequest) (*
 	// so we have an email
 	email := r.Email
 	// check whether this email exists in the database or not
-	_, err := a.client.GetUserByEmail(context.Background(), &ser.GetUserWithEmail{Email: email})
+	_, err := a.client.GetUserByEmail(context.Background(), &userService.GetUserWithEmail{Email: email})
 
 	if err != nil {
 		// there is an error
@@ -95,6 +95,6 @@ func (a *AuthenticationServiceImpl) mustEmbedUnimplementedAuthenticationServiceS
 
 }
 
-func NewAuthenticationServiceProvider(client ser.UserServiceClient, emailServiceClient emailService.EmailServiceClient) *AuthenticationServiceImpl {
+func NewAuthenticationServiceProvider(client userService.UserService, emailServiceClient emailService.EmailServiceClient) AuthenticationServiceServer {
 	return &AuthenticationServiceImpl{client: client, emailclient: emailServiceClient}
 }

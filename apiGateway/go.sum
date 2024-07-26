@@ -1,3 +1,5 @@
+github.com/AFORANURAG/microServices v0.1.5 h1:D7N9LMLg+v0+qMgNpm3MhPx9LgCFy3xk/Xj88uPh6cQ=
+github.com/AFORANURAG/microServices v0.1.5/go.mod h1:8KOzyfv/ti9ujabeHyUpRx2tyfd5E+D6FoVmLX+xsxQ=
 github.com/AFORANURAG/microServices/backend/authenticationService v0.0.0-20240114100629-622fdbe46d3b h1:PXb0rrFOjtpl5vGTlWl4BouC2hSPTus7vfxG8cKDaP4=
 github.com/AFORANURAG/microServices/backend/authenticationService v0.0.0-20240114100629-622fdbe46d3b/go.mod h1:iaqyHqg6ilOLa32CrmClkq04M44OryYE22SLx26QQTM=
 github.com/AFORANURAG/microServices/backend/userService v0.0.0-20240114100629-622fdbe46d3b h1:rH6O8mXagFMeCzoo4a6X7315peTjeZVZpLCkDbQFstU=

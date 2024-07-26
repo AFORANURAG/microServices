@@ -25,10 +25,8 @@ func main() {
 	}
 	grpcServer := grpc.NewServer()
 
-	authenticationService.RegisterAuthenticationServiceServer(grpcServer, authenticationService.InitializeAuthenticationService(""))
+	authenticationService.RegisterAuthenticationServiceServer(grpcServer, authenticationService.InitializeAuthenticationService(os.Getenv("DSN")))
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Printf("failed to serve grpc server:%v", err)
 	}
-	fmt.Printf("Server listening on port :%s")
-	log.Printf("Server listening on port :%s")
 }
