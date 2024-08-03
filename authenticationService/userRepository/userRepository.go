@@ -66,7 +66,7 @@ func (s *UserRepository) GetUserByRowId(rowID string) (*sql.Row, error) {
 	return res, nil
 }
 func (s *UserRepository) CreateUser(userData *userSchema.UserSchema) (*sql.Result, error) {
-	query := `INSERT INTO users (name, email,isVerified) VALUES (?, ?, ?)`
+	query := `INSERT INTO users (name, email,isVerified,phoneNumber) VALUES (?, ?,?,?)`
 	// The `Exec` function takes in a query, as well as the values for
 	// the parameters in the order they are defined
 	// s.dbs.Exec
@@ -75,7 +75,7 @@ func (s *UserRepository) CreateUser(userData *userSchema.UserSchema) (*sql.Resul
 		log.Printf("Error while getting db instance :%v ", err)
 	}
 	// Check Whether the user is there or not
-	res, err := db.Exec(query, userData.Name, userData.Email, false)
+	res, err := db.Exec(query, userData.Name, userData.Email, false,userData.PhoneNumber)
 	if err != nil {
 		log.Printf("(CreateUser) db.Exec", err)
 		return nil, err

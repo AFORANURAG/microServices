@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	queueConstants "github.com/AFORANURAG/microServices/authenticationService/constants/queue"
+	queueservicetypes "github.com/AFORANURAG/microServices/authenticationService/types/queueServiceTypes"
 	globalUtilities "github.com/AFORANURAG/microServices/authenticationService/utilityFunctions/globalUtilities"
 	"github.com/rabbitmq/amqp091-go"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -28,12 +29,32 @@ func (q *QueueService) CreateEmailServiceChannel()(*amqp.Channel,error){
     err=ch.ExchangeDeclare(queueConstants.EmailServiceMessageBrokerValues["exchange"],"fanout",true,false,false,false,nil)
 	globalUtilities.FailOnError(err,"Failed to declare exchange")
 return ch, nil
-	// declare context with timeout so that the process will be cancelled after 5 second to stop it running till timout or indefinetely
-	
+	// declare context with timeout so that the process will be cancelled after 5 second to stop it running till timout or indefinetely	
 }
 
-func NewQueueServiceProvider(url string)(*QueueService,error){
-	conn,err:=amqp091.Dial(url)
+
+func (q *QueueService) CreateOTPServiceChannel()(*amqp.Channel,error){
+	ch,err:=q.c.Channel()
+	globalUtilities.FailOnError(err, "Failed to open a channel")
+	queue,err:=ch.QueueDeclare(queueConstants.OTPServiceMessageBrokerValues["queue"],true,false,false,false,nil)
+	// fmt.Println(queue)
+	globalUtilities.FailOnError(err,fmt.Sprintf("Failed to declare queue %s",queueConstants.OTPServiceMessageBrokerValues["queue"]))
+	
+    err=ch.ExchangeDeclare(queueConstants.OTPServiceMessageBrokerValues["exchange"],"fanout",true,false,false,false,nil)
+	globalUtilities.FailOnError(err,"Failed to declare exchange")
+
+	err=ch.QueueBind(queue.Name,"",queueConstants.EmailServiceMessageBrokerValues["exchange"],false,nil)
+    globalUtilities.FailOnError(err,"Failed to create queue bindings for otpService Channel")
+return ch, nil
+	// declare context with timeout so that the process will be cancelled after 5 second to stop it running till timout or indefinetely	
+}
+
+
+
+
+
+func NewQueueServiceProvider(url queueservicetypes.QueueServicePhrase)(*QueueService){
+	conn,err:=amqp091.Dial((string)(url))
 	globalUtilities.FailOnError(err,"Failed to open connection")
-	return &QueueService{c:conn},nil
+	return &QueueService{c:conn}
 }

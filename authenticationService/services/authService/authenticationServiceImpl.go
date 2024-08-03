@@ -2,19 +2,27 @@ package authService
 
 import (
 	context "context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 
+	queueservice "github.com/AFORANURAG/microServices/authenticationService/services/queueService"
 	userService "github.com/AFORANURAG/microServices/authenticationService/services/userService"
 	authUtilities "github.com/AFORANURAG/microServices/authenticationService/utilityFunctions/authUtilites"
 	emailService "github.com/AFORANURAG/microServices/emailService/services"
 	"github.com/joho/godotenv"
 )
 
+type ConsumerMessageType struct {
+	PhoneNumber string `validate:"required,len=10"`
+	UserId int32`validate:"required"`
+}
 type AuthenticationServiceImpl struct {
+	// interfaces can't be pointer
 	client   userService.UserService
 	emailclient emailService.EmailServiceClient
+	p *queueservice.Producer 
 }
 
 func (a *AuthenticationServiceImpl) Signup(c context.Context, s *SignUpRequest) (*SignUpResponse, error) {
@@ -27,10 +35,27 @@ func (a *AuthenticationServiceImpl) Signup(c context.Context, s *SignUpRequest) 
 		// create the user here
 		// We are gonna implement the magic link flow
 		// so send him an email containing a magic link , and on clicking on that link , user will  be signedUp
-		_, err := a.client.CreateUser(context.Background(), &userService.User{Name: &s.Name, Email: s.Email})
+		_, err := a.client.CreateUser(context.Background(), &userService.User{Name: &s.Name, Email: &s.Email,PhoneNumber: &s.PhoneNumber})
+
 		// I don't understand why Name and Email are referenced differently.
 		// token:=authUtilities.
-		_, emailError := a.emailclient.SendEmail(context.Background(), &emailService.EmailServiceRequest{Email: *s.Email, OriginURL: s.OriginURL})
+		user,err:=a.client.GetUserByName(context.Background(), &userService.User{Name: &s.Name})
+		if err!=nil{
+			log.Fatalf("Error while fetching user with name in Signup for user fetching inside first erro block")
+		}
+
+fmt.Printf("user is:%v",user.Id)
+		
+		consumerMessage:=ConsumerMessageType{UserId:user.Id,PhoneNumber: s.PhoneNumber}
+		    jsonString, err := json.Marshal(consumerMessage)
+			fmt.Printf("json is %s",jsonString)
+    if err != nil {
+        log.Fatalf("Error marshalling struct to JSON: %v", err)
+        
+    }
+
+	log.Printf("<----------------------------otp is send ==============================>")
+		_, emailError := a.p.SendOtp(jsonString)
 		if emailError != nil {
 			log.Printf("Error While Sending Email : %v", emailError)
 		}
@@ -95,6 +120,8 @@ func (a *AuthenticationServiceImpl) mustEmbedUnimplementedAuthenticationServiceS
 
 }
 
-func NewAuthenticationServiceProvider(client userService.UserService, emailServiceClient emailService.EmailServiceClient) AuthenticationServiceServer {
-	return &AuthenticationServiceImpl{client: client, emailclient: emailServiceClient}
+
+
+func NewAuthenticationServiceProvider(client userService.UserService, emailServiceClient emailService.EmailServiceClient,p *queueservice.Producer ) AuthenticationServiceServer {
+	return &AuthenticationServiceImpl{client: client, emailclient: emailServiceClient,p:p}
 }

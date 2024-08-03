@@ -8,10 +8,11 @@ import (
 
 	dbservice "github.com/AFORANURAG/microServices/authenticationService/services/dbService"
 
+	userServiceTypes "github.com/AFORANURAG/microServices/authenticationService/types/userServiceTypes"
 	"github.com/google/wire"
 )
 
-func InitializeUserService(phrase string) UserService {
+func InitializeUserService(phrase userServiceTypes.UserServicePhrase) UserService {
 	wire.Build(NewUserServiceProvider, userRepository.NewUserRepositoryProvider, dbservice.NewDBServiceClientProvider)
 	return &UserServiceImpl{}
 	

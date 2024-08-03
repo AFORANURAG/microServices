@@ -14,7 +14,7 @@ type AuthenticationResponse struct {
 }
 
 type IAuthenticationService interface {
-	Signup(name string, email string, originURL string) (*AuthenticationResponse, error)
+	Signup(name string, email string, originURL string,phoneNumber string) (*AuthenticationResponse, error)
 	VerifyAccount(token string) (*ser.VerifyAccountResponse, error)
 	Login(email string) (*AuthenticationResponse, error)
 }
@@ -23,8 +23,8 @@ type AuthenticationServiceImpl struct {
 	authServiceClient ser.AuthenticationServiceClient
 }
 
-func (a *AuthenticationServiceImpl) Signup(name string, email string, originURL string) (*AuthenticationResponse, error) {
-	response, err := a.authServiceClient.Signup(context.Background(), &ser.SignUpRequest{Name: name, Email: &email, OriginURL: originURL})
+func (a *AuthenticationServiceImpl) Signup(name string, email string, originURL string,phoneNumber string) (*AuthenticationResponse, error) {
+	response, err := a.authServiceClient.Signup(context.Background(), &ser.SignUpRequest{Name: name, Email: email, OriginURL: originURL,PhoneNumber: phoneNumber})
 	if err != nil {
 		log.Printf("Error While Signing up in authentication in api gatewate : %v", err)
 		return &AuthenticationResponse{Status: 500, Success: false}, err

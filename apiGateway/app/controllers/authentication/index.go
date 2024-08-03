@@ -25,7 +25,7 @@ func (a *AuthenticationController) SignUp(c *fiber.Ctx) error {
 	fmt.Printf("originURL is :%s", originURL)
 	var user validations.User
 	c.BodyParser(&user)
-	signedUpResponse, signUpError := a.authService.Signup(user.Name, user.Email, originURL)
+	signedUpResponse, signUpError := a.authService.Signup(user.Name, user.Email, originURL,user.PhoneNumber)
 	if signUpError != nil {
 		log.Printf("error while signing up : % v", signUpError)
 	}

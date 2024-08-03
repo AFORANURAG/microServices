@@ -4,10 +4,11 @@
 package queueservice
 
 import (
+	queueServiceType "github.com/AFORANURAG/microServices/authenticationService/types/queueServiceTypes"
 	"github.com/google/wire"
 )
 
-func InitializeProducerService(phrase string) *Producer {
-	wire.Build(NewProducerServiceProvider)
+func InitializeProducerService(phrase queueServiceType.QueueServicePhrase ) *Producer {
+	wire.Build(NewProducerServiceProvider,NewQueueServiceProvider)
 	return &Producer{}
 }

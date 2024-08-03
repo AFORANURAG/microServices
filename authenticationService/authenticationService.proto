@@ -1,42 +1,46 @@
 syntax = "proto3";
+
 package authenticationService;
 
 option go_package="./";
 
 message SignUpRequest {
-  string name=1;
-  optional string email=2;
-  string originURL=3;
-
+  string name = 1;
+  string email = 2;
+  string originURL = 3;
+  string phoneNumber = 4;
 }
 
 message SignUpResponse {
-int32 status=1;
-bool success=2;
-int32 userId =3;
-optional string data=4;  
+  int32 status = 1;
+  bool success = 2;
+  int32 userId = 3;
+  string data = 4;
 }
 
 message LoginRequest {
- string email=1;
+  string email = 1;
+  string phoneNumber = 2;
 }
 
 message LoginResponse {
-  int32 status=1;
-  bool success=2;
- optional string token=3;
+  int32 status = 1;
+  bool success = 2;
+  string token = 3;
 }
-message VerifyAccountRequest{
-  string token=1;
+
+message VerifyAccountRequest {
+  string token = 1;
   // rest things will be decoded from token itself , it will have encoded claims
 }
 
-message VerifyAccountResponse{
-  int32 status=1;
-  bool isVerified=2;
+message VerifyAccountResponse {
+  int32 status = 1;
+  bool isVerified = 2;
 }
-service AuthenticationService{
-  rpc signup(SignUpRequest) returns (SignUpResponse){};
-  rpc verifyUser(VerifyAccountRequest) returns (VerifyAccountResponse){};
-  rpc login(LoginRequest) returns (LoginResponse);
+
+service AuthenticationService {
+  rpc signup (SignUpRequest) returns (SignUpResponse);
+  rpc verifyUser (VerifyAccountRequest) returns (VerifyAccountResponse);
+  rpc login (LoginRequest) returns (LoginResponse);
 }

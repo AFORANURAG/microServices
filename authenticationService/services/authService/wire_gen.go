@@ -8,14 +8,18 @@ package authService
 
 import (
 	"github.com/AFORANURAG/microServices/authenticationService/clientProviders/emailServiceClient"
+	"github.com/AFORANURAG/microServices/authenticationService/services/queueService"
 	"github.com/AFORANURAG/microServices/authenticationService/services/userService"
+	"github.com/AFORANURAG/microServices/authenticationService/types/queueServiceTypes"
+	"github.com/AFORANURAG/microServices/authenticationService/types/userServiceTypes"
 )
 
 // Injectors from wire.go:
 
-func InitializeAuthenticationService(phrase string) AuthenticationServiceServer {
-	userServiceUserService := userService.InitializeUserService(phrase)
+func InitializeAuthenticationService(phrase1 userservicetypes.UserServicePhrase, phrase2 queueservicetypes.QueueServicePhrase) AuthenticationServiceServer {
+	userServiceUserService := userService.InitializeUserService(phrase1)
 	emailServiceClient := emailclient.NewEmailServiceServiceClientProvider()
-	authenticationServiceServer := NewAuthenticationServiceProvider(userServiceUserService, emailServiceClient)
+	producer := queueservice.InitializeProducerService(phrase2)
+	authenticationServiceServer := NewAuthenticationServiceProvider(userServiceUserService, emailServiceClient, producer)
 	return authenticationServiceServer
 }

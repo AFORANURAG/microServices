@@ -5,12 +5,12 @@ import (
 	"log"
 	"sync"
 
+	userservicetypes "github.com/AFORANURAG/microServices/authenticationService/types/userServiceTypes"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type MYSQLDBService struct {
 	db  *sql.DB
-	dsn string
 }
 
 func (dbs *MYSQLDBService) GetDb() (*sql.DB, error) {
@@ -34,9 +34,10 @@ func (dbs *MYSQLDBService) Exec(query string, args ...any) (*sql.Rows, error) {
 var DbClient *MYSQLDBService
 var once sync.Once
 
-func NewDBServiceClientProvider(uri string) *MYSQLDBService {
+func NewDBServiceClientProvider(uri userservicetypes.UserServicePhrase) *MYSQLDBService {
 	once.Do(func() {
-		db, err := sql.Open("mysql", uri)
+		url:=(string)(uri)
+		db, err := sql.Open("mysql", url)
 		if err != nil {
 			log.Printf("Error while creating DBServiceClient:%v", err)
 		}

@@ -20,6 +20,8 @@ type Request struct {
 	Name  string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Email string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
 	Id    string `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
+	PhoneNumber  string `protobuf:"bytes,4,opt,name=phoneNumber" json:"phoneNumber,omitempty"`
+
 }
 
 type CreateUserResponse struct {
@@ -37,4 +39,6 @@ type UserSchema struct {
 	Email      string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
 	Id         int32  `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
 	IsVerified bool   `protobuf:"bytes,4,opt,name=isVerified,proto3" json:"isVerified,omitempty"`
+	PhoneNumber  string `protobuf:"bytes,4,opt,name=phoneNumber" json:"phoneNumber,omitempty"`
+
 }

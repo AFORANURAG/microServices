@@ -7,6 +7,8 @@ import (
 	"os"
 
 	authenticationService "github.com/AFORANURAG/microServices/authenticationService/services/authService"
+	queueservicetypes "github.com/AFORANURAG/microServices/authenticationService/types/queueServiceTypes"
+	userservicetypes "github.com/AFORANURAG/microServices/authenticationService/types/userServiceTypes"
 
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
@@ -25,7 +27,7 @@ func main() {
 	}
 	grpcServer := grpc.NewServer()
 
-	authenticationService.RegisterAuthenticationServiceServer(grpcServer, authenticationService.InitializeAuthenticationService(os.Getenv("DSN")))
+	authenticationService.RegisterAuthenticationServiceServer(grpcServer, authenticationService.InitializeAuthenticationService(userservicetypes.UserServicePhrase(os.Getenv("DSN")),queueservicetypes.QueueServicePhrase(os.Getenv("AMQP_CLOUD_URL"))))
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Printf("failed to serve grpc server:%v", err)
 	}

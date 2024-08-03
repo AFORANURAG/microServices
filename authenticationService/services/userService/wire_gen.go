@@ -8,12 +8,13 @@ package userService
 
 import (
 	"github.com/AFORANURAG/microServices/authenticationService/services/dbService"
+	"github.com/AFORANURAG/microServices/authenticationService/types/userServiceTypes"
 	"github.com/AFORANURAG/microServices/authenticationService/userRepository"
 )
 
 // Injectors from wire.go:
 
-func InitializeUserService(phrase string) UserService {
+func InitializeUserService(phrase userservicetypes.UserServicePhrase) UserService {
 	mysqldbService := dbservice.NewDBServiceClientProvider(phrase)
 	iUserRepository := userRepository.NewUserRepositoryProvider(mysqldbService)
 	userService := NewUserServiceProvider(iUserRepository)

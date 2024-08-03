@@ -4,6 +4,7 @@ import (
 	context "context"
 	"fmt"
 	"log"
+	"time"
 
 	userSchema "github.com/AFORANURAG/microServices/authenticationService/models"
 	userRepository "github.com/AFORANURAG/microServices/authenticationService/userRepository"
@@ -21,15 +22,19 @@ func (u *UserServiceImpl) GetUserByName(c context.Context, in *User) (*Response,
 	}
 	log.Printf("userProfile row %v", userProfileRow)
 	// Row,err
-	var response Response
-	scanErr := userProfileRow.Scan(&response.Id, &response.Name, &response.Email, &response.IsVerified)
+	var response NewUser
+	var createdAtString string // Temporary variable to store the timestamp as a string
+	scanErr := userProfileRow.Scan(&response.UserID, &response.Email, &response.Name, &response.PhoneNumber,&response.IsVerified,&createdAtString)
 	if scanErr != nil {
 		log.Printf("<--------------------------Error While fetching user from the database:%v---------------------------->", scanErr)
 		return nil, scanErr
 	}
-
-	log.Printf("Response is %v", *response.Name)
-	return &response, scanErr
+        response.CreatedAt, err = time.Parse(time.RFC3339, createdAtString)
+		if err!=nil{
+			log.Printf("Error while parsing date in GetUserByName")
+		}
+	log.Printf("Response is %v", response.Name)
+	return &Response{Name: &response.Name,Id: int32(response.UserID),Email: response.Email,IsVerified: response.IsVerified}, nil
 
 }
 
@@ -64,10 +69,11 @@ func (u *UserServiceImpl) GetUserByEmail(c context.Context, in *GetUserWithEmail
 
 func (u *UserServiceImpl) CreateUser(c context.Context, in *User) (*CreateUserResponse, error) {
 	// Create the user here
-	log.Printf("In request is %v", in)
+	log.Printf("In request is %v", *in.PhoneNumber)
 	userProfile, userFetchError := u.GetUserByName(context.Background(), in)
+	
 	if userFetchError != nil {
-		_, err := u.UserRepo.CreateUser(&userSchema.UserSchema{Name: *in.Name, Email: *in.Email})
+		_, err := u.UserRepo.CreateUser(&userSchema.UserSchema{Name: *in.Name, Email: *in.Email,PhoneNumber: *in.PhoneNumber})
 		if err != nil {
 			return nil, fmt.Errorf("Error creating user:%v", err)
 		}
