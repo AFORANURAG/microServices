@@ -1,6 +1,10 @@
 package userSchema
 
-import "google.golang.org/protobuf/runtime/protoimpl"
+import (
+	"time"
+
+	"google.golang.org/protobuf/runtime/protoimpl"
+)
 
 type Response struct {
 	state         protoimpl.MessageState
@@ -41,4 +45,16 @@ type UserSchema struct {
 	IsVerified bool   `protobuf:"bytes,4,opt,name=isVerified,proto3" json:"isVerified,omitempty"`
 	PhoneNumber  string `protobuf:"bytes,4,opt,name=phoneNumber" json:"phoneNumber,omitempty"`
 
+}
+
+
+// User represents a record in the users table.
+type NewUser struct {
+	Id int `json:"id"` 
+    UserID      int      `json:"userId"`      // Unique ID for each user, auto-incremented
+    Email       string    `json:"email"`       // Email address of the user (unique)
+    Name        string    `json:"name"`        // Name of the user
+    PhoneNumber *string   `json:"phoneNumber"` // Phone number of the user
+    IsVerified  bool      `json:"isVerified"`  // Verification status
+    CreatedAt   time.Time `json:"createdAt"`   // Timestamp when the user was created
 }

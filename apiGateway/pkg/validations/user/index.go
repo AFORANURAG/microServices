@@ -2,10 +2,9 @@ package validations
 
 type (
 	User struct {
-		Name  string `validate:"min=5,max=20"`
-		Email string `validate:"required"`
-		PhoneNumber string `validate:"required"`
-		// it is you who assume that email is unique , it might not be unique ,so have checks for them and should set Unique index
-		// to Email
+		Name        string `json:"name" validate:"omitempty,min=5,max=20"`
+		Email       string `json:"email" validate:"omitempty,email"`
+		PhoneNumber string `json:"phoneNumber" validate:"required"`
+		// Note: Ensure that the email field is unique at the database level by setting a unique index on the Email column
 	}
 )

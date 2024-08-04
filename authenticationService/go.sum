@@ -1,7 +1,7 @@
 filippo.io/edwards25519 v1.1.0 h1:FNf4tywRC1HmFuKW5xopWpigGjJKiJSV0Cqo0cJWDaA=
 filippo.io/edwards25519 v1.1.0/go.mod h1:BxyFTGdWcka3PhytdK4V28tE5sGfRvvvRV7EaN4VDT4=
-github.com/AFORANURAG/microServices/emailService v0.0.0-20240726154403-12ea93e1b44c h1:bA5yBy0uRE62eBngbxznZ4B1Uy+zlJYQNjlYAZ8PSNo=
-github.com/AFORANURAG/microServices/emailService v0.0.0-20240726154403-12ea93e1b44c/go.mod h1:NlMjII0iN891bm1UsbM+czHs4Z9umod0sQVaDBSPoa8=
+github.com/AFORANURAG/microServices/emailService v0.0.0-20240803223716-265a75c7f71f h1:sKookJQ6cKGpscxJJ6L6UBPxnPDR2/l3yd2jNqKHxKs=
+github.com/AFORANURAG/microServices/emailService v0.0.0-20240803223716-265a75c7f71f/go.mod h1:NlMjII0iN891bm1UsbM+czHs4Z9umod0sQVaDBSPoa8=
 github.com/AFORANURAG/microServices/userService v0.0.0-20240725071507-461f0f420531 h1:p/Qn0pz4Gy2w0UeEUM66TfUh4wM1ycOvK7OofFXLmFo=
 github.com/AFORANURAG/microServices/userService v0.0.0-20240725071507-461f0f420531/go.mod h1:V1Bc3SKFC5b/wDEdoD8yHglc51h/YQ9aFiuKJf3byS8=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=

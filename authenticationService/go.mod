@@ -5,7 +5,7 @@ go 1.21
 toolchain go1.22.5
 
 require (
-	github.com/AFORANURAG/microServices/emailService v0.0.0-20240726154403-12ea93e1b44c
+	github.com/AFORANURAG/microServices/emailService v0.0.0-20240803223716-265a75c7f71f
 	github.com/AFORANURAG/microServices/userService v0.0.0-20240725071507-461f0f420531
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-sql-driver/mysql v1.8.1

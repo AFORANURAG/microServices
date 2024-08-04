@@ -2,7 +2,6 @@ package userService
 
 import (
 	"context"
-	"time"
 )
 
 type User struct {
@@ -36,7 +35,10 @@ type CreateUserResponse struct{
 type MarkUserAsVerfiedRequest struct {
 
 	IsVerified bool   `protobuf:"varint,1,opt,name=isVerified,proto3" json:"isVerified,omitempty"`
-	Email      string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
+	PhoneNumber      string `protobuf:"bytes,2,opt,name=phoneNumber,proto3" json:"phoneNumber,omitempty"`
+	Otp      int `protobuf:"bytes,3,opt,name=otp,proto3" json:"otp,omitempty"`
+	IsSigningIn bool `protobuf:"bytes,4,opt,name=isSigningIn,proto3" json:"isSigningIn,omitempty"`
+
 }
 type MarkUserAsVerfiedResponse struct{
 
@@ -48,18 +50,9 @@ type UserService interface {
 	GetUserByName(context.Context, *User) (*Response, error)
 	GetUserById(context.Context, *User) (*Response, error)
 	GetUserByEmail(context.Context, *GetUserWithEmail) (*Response, error)
+	GetUserWithPhoneNumber(context.Context,*User)(*Response,error)
 	CreateUser(context.Context,  *User) (*CreateUserResponse, error)
 	MarkAsVerfied(context.Context, *MarkUserAsVerfiedRequest) (*MarkUserAsVerfiedResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
-// User represents a record in the users table.
-type NewUser struct {
-	Id int `json:"id"` 
-    UserID      int       `json:"userId"`      // Unique ID for each user, auto-incremented
-    Email       string    `json:"email"`       // Email address of the user (unique)
-    Name        string    `json:"name"`        // Name of the user
-    PhoneNumber *string   `json:"phoneNumber"` // Phone number of the user
-    IsVerified  bool      `json:"isVerified"`  // Verification status
-    CreatedAt   time.Time `json:"createdAt"`   // Timestamp when the user was created
-}

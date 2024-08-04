@@ -22,7 +22,7 @@ func (u *UserServiceImpl) GetUserByName(c context.Context, in *User) (*Response,
 	}
 	log.Printf("userProfile row %v", userProfileRow)
 	// Row,err
-	var response NewUser
+	var response userSchema.NewUser
 	var createdAtString string // Temporary variable to store the timestamp as a string
 	scanErr := userProfileRow.Scan(&response.UserID, &response.Email, &response.Name, &response.PhoneNumber,&response.IsVerified,&createdAtString)
 	if scanErr != nil {
@@ -59,7 +59,7 @@ func (u *UserServiceImpl) GetUserByEmail(c context.Context, in *GetUserWithEmail
 	// Row,err
 	response := &Response{
 		Email:      userProfile.Email,
-		Id:         userProfile.Id,
+		Id:         int32(userProfile.UserID),
 		IsVerified: userProfile.IsVerified,
 		Name:       &userProfile.Name,
 	}
@@ -67,6 +67,23 @@ func (u *UserServiceImpl) GetUserByEmail(c context.Context, in *GetUserWithEmail
 	return response, nil
 }
 
+
+func (u *UserServiceImpl) GetUserWithPhoneNumber(c context.Context, in *User) (*Response, error) {
+	userProfile, err := u.UserRepo.GetUserWithPhoneNumber(*in.PhoneNumber)
+	if err != nil {
+		log.Printf("Error while fetching users :%v ", err)
+		return &Response{}, nil
+	}
+	// Row,err
+	response := &Response{
+		Email:      userProfile.Email,
+		Id:         int32(userProfile.UserID),
+		IsVerified: userProfile.IsVerified,
+		Name:       &userProfile.Name,
+	}
+
+	return response, nil
+}
 func (u *UserServiceImpl) CreateUser(c context.Context, in *User) (*CreateUserResponse, error) {
 	// Create the user here
 	log.Printf("In request is %v", *in.PhoneNumber)
@@ -85,18 +102,20 @@ func (u *UserServiceImpl) CreateUser(c context.Context, in *User) (*CreateUserRe
 
 func (u *UserServiceImpl) MarkAsVerfied(c context.Context, req *MarkUserAsVerfiedRequest) (*MarkUserAsVerfiedResponse, error) {
 	// extract the email from the request
-	email := req.Email
-	userProfile, err := u.UserRepo.GetUserWithEmail(email)
+	phoneNumber := req.PhoneNumber
+	userProfile, err := u.UserRepo.GetUserWithPhoneNumber(phoneNumber)
+fmt.Printf("user Profile is %v",userProfile)
+fmt.Printf("isUser SigningIn,%t",req.IsSigningIn)
 	// check if it exists or not
 	if err != nil {
 		// No User Might be exist
 		log.Printf("Error While fetching user In MarkAsVerified  : %v\n", err)
 		return &MarkUserAsVerfiedResponse{Status: 400, Success: false}, err
 	}
-	if userProfile.IsVerified {
+	if userProfile.IsVerified&&!req.IsSigningIn {
 		return &MarkUserAsVerfiedResponse{Status: 200, Success: true}, nil
 	}
-	markedUser, markUserErr := u.UserRepo.UpdateVerificationStatus(req.IsVerified, email)
+	markedUser, markUserErr := u.UserRepo.UpdateVerificationStatus(req.IsVerified, nil,&phoneNumber,req.Otp)
 	if markedUser {
 		return &MarkUserAsVerfiedResponse{Status: 200, Success: true}, nil
 	}

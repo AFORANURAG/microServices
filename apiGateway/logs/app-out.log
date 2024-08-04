@@ -2,3 +2,5 @@
 2023/11/26 15:12:18.842052 index.go:21: [Info] hello world , I am in Sign up
 2023/12/06 00:12:43.891439 dependency_injection.go:17: [Info] cannot provide function "backend/pkg/services".RegisterServices (C:/Users/Anurag/Desktop/e-commerce-app/backend/pkg/services/index.go:14): bad result 1: cannot provide parameter objects: *services.Services embeds a dig.In
 2023/12/06 00:26:36.025564 dependency_injection.go:17: [Info] cannot provide function "backend/pkg/services".RegisterServices (C:/Users/Anurag/Desktop/e-commerce-app/backend/pkg/services/index.go:20): bad result 1: cannot return a pointer to a result object, use a value instead: *services.Services is a pointer to a struct that embeds dig.Out
+2024/08/04 21:03:41.850714 fiber_config.go:31: [Info] Undefined validation function 'json:email' on field 'Email'
+2024/08/04 21:04:14.969447 fiber_config.go:31: [Info] Undefined validation function 'opt' on field 'Name'

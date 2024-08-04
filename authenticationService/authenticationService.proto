@@ -30,13 +30,15 @@ message LoginResponse {
 }
 
 message VerifyAccountRequest {
-  string token = 1;
-  // rest things will be decoded from token itself , it will have encoded claims
+  string phoneNumber = 1;
+  int64 otp=2;
+  bool isSigningIn=3;
 }
 
 message VerifyAccountResponse {
   int32 status = 1;
   bool isVerified = 2;
+  optional string  accessToken=3;
 }
 
 service AuthenticationService {

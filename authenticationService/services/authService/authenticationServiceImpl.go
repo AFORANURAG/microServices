@@ -37,8 +37,12 @@ func (a *AuthenticationServiceImpl) Signup(c context.Context, s *SignUpRequest) 
 		// so send him an email containing a magic link , and on clicking on that link , user will  be signedUp
 		_, err := a.client.CreateUser(context.Background(), &userService.User{Name: &s.Name, Email: &s.Email,PhoneNumber: &s.PhoneNumber})
 
+		if err!=nil {
+			log.Printf("\n Error while creating user\n Error is %s",err)
+			return &SignUpResponse{Status: 500,Success: false},err
+		}
+
 		// I don't understand why Name and Email are referenced differently.
-		// token:=authUtilities.
 		user,err:=a.client.GetUserByName(context.Background(), &userService.User{Name: &s.Name})
 		if err!=nil{
 			log.Fatalf("Error while fetching user with name in Signup for user fetching inside first erro block")
@@ -57,7 +61,7 @@ fmt.Printf("user is:%v",user.Id)
 	log.Printf("<----------------------------otp is send ==============================>")
 		_, emailError := a.p.SendOtp(jsonString)
 		if emailError != nil {
-			log.Printf("Error While Sending Email : %v", emailError)
+			log.Printf("Error While Sending OTP : %v", emailError)
 		}
 		return &SignUpResponse{Status: 200, Success: true}, err
 	}
@@ -69,13 +73,15 @@ func (a *AuthenticationServiceImpl) VerifyUser(c context.Context, req *VerifyAcc
 	//First check whether the user's email exists in our db or not
 	// first decode the token
 	godotenv.Load()
-	secretKey := os.Getenv("SECRET_KEY")
-	isVerified, email := authUtilities.VerifyJWT(req.Token, secretKey)
-	fmt.Printf("isVerified: %v , email: %v\n", isVerified, email)
-	if isVerified && email != authUtilities.INVALID_TOKEN {
+	
+	url := os.Getenv("2FA_AUTHENTICATION_URI")
+	isVerified := authUtilities.Verify2factorOTP(url,req.PhoneNumber,int(req.Otp))
+	fmt.Printf("isVerified: %v",isVerified)
+	if isVerified{
+		fmt.Printf("\nIsSigning\n:%t",req.IsSigningIn)
 		// User is verified now call the login function with this email
 		// mark the user as verified in the database
-		_, markUserErr := a.client.MarkAsVerfied(context.Background(), &userService.MarkUserAsVerfiedRequest{IsVerified: true, Email: email})
+		_, markUserErr := a.client.MarkAsVerfied(context.Background(), &userService.MarkUserAsVerfiedRequest{IsVerified: true, PhoneNumber: req.PhoneNumber,Otp: int(req.Otp),IsSigningIn:req.IsSigningIn })
 		if markUserErr != nil {
 			log.Printf("Error While marking user as verified: %v", markUserErr)
 			return &VerifyAccountResponse{
@@ -83,9 +89,20 @@ func (a *AuthenticationServiceImpl) VerifyUser(c context.Context, req *VerifyAcc
 				IsVerified: false,
 			}, markUserErr
 		}
+		// generate a jwt and give it user.
+		// additionally this jwt should be saved to user profile each time he verifies in.
+		// and based on this jwt, and based on this jwt, user auth state is determined, means
+		// whether he is loggedin or signedUp
+		token,err:=authUtilities.GenerateToken(req.PhoneNumber,os.Getenv("SECRET_KEY"))
+		if err!=nil{
+			log.Printf("\nError while Generating token\n Error")
+			return &VerifyAccountResponse{Status: 500,IsVerified: false},err
+		}
+
 		return &VerifyAccountResponse{
 			Status:     200,
 			IsVerified: true,
+			AccessToken: &token,
 		}, nil
 	}
 	return &VerifyAccountResponse{
@@ -95,25 +112,38 @@ func (a *AuthenticationServiceImpl) VerifyUser(c context.Context, req *VerifyAcc
 }
 
 func (a *AuthenticationServiceImpl) Login(c context.Context, r *LoginRequest) (*LoginResponse, error) {
-
-	// so we have an email
-	email := r.Email
+	// so we have a phoneNumber
+	phoneNumber:=r.PhoneNumber
 	// check whether this email exists in the database or not
-	_, err := a.client.GetUserByEmail(context.Background(), &userService.GetUserWithEmail{Email: email})
+	user, err := a.client.GetUserWithPhoneNumber(context.Background(), &userService.User{PhoneNumber: &phoneNumber})
 
 	if err != nil {
 		// there is an error
 		log.Printf("Error While fetching user WithEmail: %v", err)
 		return &LoginResponse{Status: 400, Success: false}, err
 	}
-	// user exists , then sent him an email with a token
-	_, emailError := a.emailclient.SendEmail(context.Background(), &emailService.EmailServiceRequest{Email: email})
-	if emailError != nil {
-		log.Printf("Error While Sending Email : %v", emailError)
-		return &LoginResponse{Status: 500, Success: false}, emailError
-	}
-	return &LoginResponse{Status: 200, Success: true}, nil
+	    // user exists , then sent him an email with a token
+		// obviosly there a lot can be done here
 
+		consumerMessage:=ConsumerMessageType{UserId:user.Id,PhoneNumber: phoneNumber}
+		    jsonString, err := json.Marshal(consumerMessage)
+			fmt.Printf("json is %s",jsonString)
+    if err != nil {
+        log.Fatalf("Error marshalling struct to JSON: %v", err)
+        
+    }
+
+		_, emailError := a.p.SendOtp(jsonString)
+		if emailError != nil {
+			log.Printf("Error While Sending OTP : %v", emailError)
+		return &LoginResponse{Status: 500, Success: false}, emailError
+		}
+		fmt.Print("<----------------OTP is send--------------->")
+    // token,err:=authUtilities.GenerateToken(phoneNumber,os.Getenv("SECRET_KEY"))
+	// if err!=nil{
+	// 	return &LoginResponse{Status: 500,Success: false},err
+	// }
+	return &LoginResponse{Status: 200, Success: true}, nil
 }
 
 func (a *AuthenticationServiceImpl) mustEmbedUnimplementedAuthenticationServiceServer() {

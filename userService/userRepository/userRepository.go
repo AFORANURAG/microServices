@@ -40,7 +40,7 @@ func (s *UserRepository) GetUserByName(name string) (*sql.Row, error) {
 
 func (s *UserRepository) GetUserWithEmail(email string) (*userSchema.UserSchema, error) {
 	db, Dberr := s.dbs.GetDb()
-	log.Printf("<-----------------userName is %v", email)
+	log.Printf("<-----------------userEmail is %v", email)
 	if Dberr != nil {
 		log.Printf("Error while getting DB  :%v", Dberr)
 		return &userSchema.UserSchema{}, Dberr
