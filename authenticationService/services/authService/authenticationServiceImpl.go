@@ -117,6 +117,7 @@ func (a *AuthenticationServiceImpl) Login(c context.Context, r *LoginRequest) (*
 	// check whether this email exists in the database or not
 	user, err := a.client.GetUserWithPhoneNumber(context.Background(), &userService.User{PhoneNumber: &phoneNumber})
 
+
 	if err != nil {
 		// there is an error
 		log.Printf("Error While fetching user WithEmail: %v", err)

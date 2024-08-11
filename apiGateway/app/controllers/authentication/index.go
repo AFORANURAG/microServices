@@ -39,8 +39,15 @@ func (a *AuthenticationController) Login(c *fiber.Ctx) error {
 	var user validations.User
 	c.BodyParser(&user)
 	LoginResponse, LoginErr := a.authService.Login(user.PhoneNumber)
+fmt.Printf("LoginError is : %s",LoginErr)
+// The error codes, good practices etc, just sucks in your server and in your implemention of rpc and microServices.
+// 1. Make the responses,error code standardised, so that things become easy and more productive,
+// 2. Follow all the good practices, consistent and standardised practices.
+		if LoginErr!=nil&&LoginErr.Error()=="rpc error: code = Unknown desc = sql: no rows in result set"{
+			return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"Message":"It looks like, you don't have any account, Please create one."})
+		}
 	if LoginErr != nil {
-		log.Printf("error while signing up : % v", LoginErr)
+		log.Printf("error while signing up : % v", LoginErr.Error())
 	}
 
 	return c.Status(fiber.StatusAccepted).JSON(LoginResponse)

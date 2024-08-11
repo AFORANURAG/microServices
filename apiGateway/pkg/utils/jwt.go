@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -13,40 +14,29 @@ const (
 func VerifyJWT(tokenString string, secretKey string) (bool, string) {
 token,err:=jwt.Parse(tokenString,func (token *jwt.Token)(interface{},error)  {
 	if _,ok:=token.Method.(*jwt.SigningMethodHMAC);!ok{
-		return nil,fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		return nil,fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 	}
-	
-
+	return []byte(secretKey),nil
 })
 
+	if err != nil {
+		log.Printf("Error While Decoding  JWT :%v\n", err)
+		return false, ""
+	}
 
-
-
-	// token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-	// 	if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-	// 		return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-	// 	}
-	// 	return []byte(secretKey), nil
-	// })
-	// if err != nil {
-	// 	log.Printf("Error While Decoding  JWT :%v\n", err)
-	// 	return false, ""
-	// }
-	// fmt.Printf("Token is: %t\n", token.Valid)
-
-	// if token.Valid {
-	// 	fmt.Printf("Hello world ")
-	// 	claims, ok := token.Claims.(jwt.MapClaims)
-	// 	fmt.Printf("Ok ok : %v\n", ok)
-	// 	if ok {
-	// 		if email, ok := claims["email"].(string); ok {
-	// 			fmt.Printf("Email is : %v\n", email)
-	// 			return true, email
-	// 		}
-	// 	}
-	// 	if !ok {
-	// 		return false, ""
-	// 	}
-	// }
-	// return false, INVALID_TOKEN
+	if token.Valid{
+		claims,ok:=token.Claims.(jwt.MapClaims)
+		if ok {
+			if phoneNumber, ok := claims["phoneNumber"].(string); ok {
+				fmt.Printf("PhoneNumber is : %v\n", phoneNumber)
+				return true, phoneNumber
+			}
+			
+		}
+		if !ok{
+				return false,""
+		}
+	}
+	
+	return false, INVALID_TOKEN
 }

@@ -72,7 +72,8 @@ func (u *UserServiceImpl) GetUserWithPhoneNumber(c context.Context, in *User) (*
 	userProfile, err := u.UserRepo.GetUserWithPhoneNumber(*in.PhoneNumber)
 	if err != nil {
 		log.Printf("Error while fetching users :%v ", err)
-		return &Response{}, nil
+		
+		return &Response{}, err
 	}
 	// Row,err
 	response := &Response{

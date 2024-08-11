@@ -36,8 +36,9 @@ func (a *AuthenticationServiceImpl) Signup(name string, email string, originURL 
 }
 func (a *AuthenticationServiceImpl) Login(phoneNumber string) (*AuthenticationResponse, error) {
 	response, err := a.authServiceClient.Login(context.Background(), &ser.LoginRequest{PhoneNumber: phoneNumber})
+	
 	if err != nil {
-		log.Printf("Error While Signing up in authentication in api gatewate : %v", err)
+		log.Printf("Error While Signing up in authentication in api gatewate : %v", err.Error())
 		return &AuthenticationResponse{Status: 500, Success: false}, err
 	}
 	return &AuthenticationResponse{Status: response.Status, Success: response.Success}, nil
